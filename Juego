@@ -1,0 +1,195 @@
+import pygame
+from pygame.locals import *
+from pygame.sprite import Sprite
+class personaje(Sprite):
+        def __init__(self):
+                self.image = personaje = pygame.image.load("imagenes/1.png").convert_alpha()
+                self.rect = self.image.get_rect()
+                self.rect.move_ip(50, 300)
+                self.muerto = 0
+        def update(self):
+                teclas = pygame.key.get_pressed()
+                if teclas[K_SPACE]:
+                        self.image = personaje = pygame.image.load("imagenes/3.png").convert_alpha()
+                elif recuperacion.rect.x > 860:
+                        self.image = personaje = pygame.image.load("imagenes/1.png").convert_alpha()
+
+                if teclas[K_LEFT]:
+                        self.image = personaje = pygame.image.load("imagenes/4.png").convert_alpha()
+                        if self.rect.x > 0:
+                                self.rect.x -= 10
+                elif teclas[K_RIGHT]:
+                        self.image = personaje = pygame.image.load("imagenes/5.png").convert_alpha()
+                        if self.rect.x < 740:
+                                self.rect.x += 10
+
+                if teclas[K_UP]:
+                        self.image = personaje = pygame.image.load("imagenes/6.png").convert_alpha()
+                        if self.rect.y > 32:
+                                self.rect.y -= 10
+                elif teclas[K_DOWN]:
+                        if self.rect.y < 530:
+                                self.image = personaje = pygame.image.load("imagenes/2.png").convert_alpha()
+                                self.rect.y += 10
+
+class recuperacion(Sprite):
+        def __init__(self):
+                self.image = recuperacion = pygame.image.load("imagenes/Recuperacion.png").convert_alpha()
+                self.rect = self.image.get_rect()
+                self.rect.move_ip(900, 700)
+        def update(self):
+                teclas = pygame.key.get_pressed()
+                if self.rect.x > 840:
+                        if teclas[K_SPACE]:
+                                self.rect.x = (personaje.rect.x + 60)
+                                self.rect.y = (personaje.rect.y + 14)
+                if self.rect.x < 870:
+                        self.rect.x += 20
+
+class barravidaA(Sprite):
+        def __init__(self):
+                self.image = barravidaA = pygame.image.load("imagenes/barravidaA.png").convert_alpha()
+                self.rect = self.image.get_rect()
+                self.rect.move_ip(18, 4)
+        def update(self):
+                if barravidaA.rect.x <= -152:
+                        personaje.muerto = 1
+                if callari.rect.y >= (personaje.rect.y - 56):
+                        if callari.rect.y <= (personaje.rect.y + 62):
+                                if callari.rect.x >= personaje.rect.x:
+                                        if callari.rect.x <= (personaje.rect.x + 43):
+                                                barravidaA.rect.x -= 26
+                                                callari.rect.x = -400
+                if prof.rect.y >= (personaje.rect.y - 56):
+                        if prof.rect.y <= (personaje.rect.y + 62):
+                                if prof.rect.x >= personaje.rect.x:
+                                        if prof.rect.x <= (personaje.rect.x + 43):
+                                                barravidaA.rect.x -= 26
+                                                callari.rect.x = -400
+
+class prof(Sprite):
+        def __init__(self):
+                self.image = prof = pygame.image.load("imagenes/PROF.png").convert_alpha()
+                self.rect = self.image.get_rect()
+                self.rect.move_ip(750, 300)
+                self.bandera = 0
+                self.muerto = 0
+        def update(self):
+                if self.rect.y == 40:
+                        self.bandera = 0
+                elif self.rect.y == 540:
+                        self.bandera = 1
+
+                if self.bandera == 0:
+                        self.rect.y += 10
+                elif self.bandera == 1:
+                        self.rect.y -= 10
+        def dificil(self):
+                if self.rect.x < 0:
+                        self.rect.x = 800
+                if self.rect.y > 600:
+                        self.rect.y = 0
+                self.rect.x -= 10
+                self.rect.y += 10
+
+class callari(Sprite):
+        def __init__(self):
+                self.image = barravidaA = pygame.image.load("imagenes/Callari.png").convert_alpha()
+                self.rect = self.image.get_rect()
+                self.rect.move_ip(-400, -400)
+        def update(self):
+                if self.rect.x == -400:
+                        if prof.rect.y == personaje.rect.y:
+                                self.rect.x = (prof.rect.x - 60)
+                                self.rect.y = (prof.rect.y - 14)
+                if self.rect.x > -400:
+                        self.rect.x -= 5
+
+class barravidaP(Sprite):
+        def __init__(self):
+                self.image = barravidaP = pygame.image.load("imagenes/barravidaP.png").convert_alpha()
+                self.rect = self.image.get_rect()
+                self.rect.move_ip(612, 4)
+        def update(self):
+                if self.rect.x >= 782:
+                        prof.muerto = 1
+                if recuperacion.rect.y >= prof.rect.y:
+                        if recuperacion.rect.y <= (prof.rect.y + 62):
+                                if recuperacion.rect.x >= prof.rect.x:
+                                        if recuperacion.rect.x <= (prof.rect.x + 43):
+                                                self.rect.x += 6
+                                                recuperacion.rect.x = 900
+
+if __name__ == '__main__':
+        #Música.
+        pygame.init()
+        music = pygame.mixer.music.load("imagenes/musica.mp3")
+        pygame.mixer.music.play(-1)
+
+        # Variables.
+        salir = False
+
+        # Establezco la pantalla.
+        screen = pygame.display.set_mode((800,600))
+
+        # Establezco el título.
+        pygame.display.set_caption("A la bika dile no")
+
+        # Creo dos objetos surface.
+        fondo = pygame.image.load("imagenes/auditorio3.jpg").convert()
+        cuadrovidaA = pygame.image.load("imagenes/cuadrovidaA.png").convert_alpha()
+        cuadrovidaP = pygame.image.load("imagenes/cuadrovidaP.png").convert_alpha()
+        perder = pygame.image.load("imagenes/Perder.png").convert()
+        ganar = pygame.image.load("imagenes/Ganar.png").convert()
+        # .convert() convierten la superficie a un formato de color que permite imprimirlas mucho mas rápido.
+
+        # Objetos
+        temporizador = pygame.time.Clock()
+        personaje = personaje()
+        recuperacion = recuperacion()
+        prof = prof()
+        callari = callari()
+        barravidaA = barravidaA()
+        barravidaP = barravidaP()
+
+        # Movimiento del personaje.
+        while not salir:
+                personaje.update()
+                recuperacion.update()
+                if barravidaA.rect.x < 697:
+                        prof.update()
+                else:
+                        prof.dificil()
+                callari.update()
+                barravidaA.update()
+                barravidaP.update()
+
+                # actualizacion grafica
+                screen.blit(fondo, (0, 0))
+                screen.blit(personaje.image, personaje.rect)
+                screen.blit(recuperacion.image, recuperacion.rect)
+                screen.blit(prof.image, prof.rect)
+                screen.blit(callari.image, callari.rect)
+                screen.blit(barravidaA.image, barravidaA.rect)
+                screen.blit(barravidaP.image, barravidaP.rect)
+                screen.blit(cuadrovidaA, (0,0))
+                screen.blit(cuadrovidaP, (608,0))
+                if personaje.muerto == 1:
+                        screen.blit(perder, (250,264))
+                if prof.muerto == 1:
+                        screen.blit(ganar, (250,264))
+                pygame.display.flip()
+
+                if personaje.muerto == 1:
+                        pygame.time.delay(3000)
+                        salir = True
+                elif prof.muerto == 1:
+                        pygame.time.delay(3000)
+                        salir = True
+                temporizador.tick(60)
+
+                # gestion de eventos
+                for evento in pygame.event.get():
+                        if evento.type == pygame.QUIT:
+                                salir = True
+pygame.quit()
